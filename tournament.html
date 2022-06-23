@@ -6,24 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue-tournament-bracket@2.1.2/dist/vue-tournament-bracket.umd.min.js"></script>
+    <link rel="stylesheet" href="tournament.css">
     <title>tournament</title>
 </head>
 <body>
     <div id="app">
-        <h3>リストを全件表示</h3>
-        <ul>
-            <li v-for="pair in team_lists">{{ pair.player1_name + "・" + pair.player2_name}}</li>
-        </ul>
-        <p>--------------------------------------------------------------------------------------------------------------------------------</p>
-        <h3>vue-tournament-bracketを用いたサンプル実装</h3>
+        <h3>tournament</h3>
         <bracket v-for="tournament in tournaments" :rounds="tournament.rounds">
+            
             <template #player="{ player }">
+                
                 <div
                 @drop="dropList($event, player.id)"
                 @dragover.prevent
                 @dragenter.prevent
                 >
-                    <div
+                    <div class="player_selected"
                     draggable
                     @dragstart="dragList($event, player.id)"
                     >

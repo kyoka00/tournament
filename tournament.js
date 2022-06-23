@@ -242,17 +242,17 @@ const vue = new Vue({
                 // 試合にチームを挿入
                 obj.player1 = {
                     id: team_1.team_id,
-                    name: '・' + team_1.player1_name + team_1.player2_name,
+                    name: team_1.player1_name + team_1.player2_name,
                 };
                 if(team_lists.length >= match_id_every_tournament * 2) {
                     obj.player2 = {
                         id: team_2.team_id,
-                        name: '・' + team_2.player1_name + team_2.player2_name,
+                        name: team_2.player1_name + team_2.player2_name,
                     };
                 } else {
                     obj.player2 = {
                         id: team_empty.team_id,
-                        name: '・' + team_empty.player1_name + team_empty.player2_name,
+                        name: team_empty.player1_name + team_empty.player2_name,
                     };
                 }
             })
@@ -305,13 +305,13 @@ const vue = new Vue({
                 if(drag_team.team_id === drag_match.player1.id) {
                     drag_match.player1 = {
                         id: drop_team.team_id,
-                        name: "・" + drop_team.player1_name + drop_team.player2_name,
+                        name:  drop_team.player1_name + drop_team.player2_name,
                     };
                     changed_player = 1;
                 } else if(drag_team.team_id === drag_match.player2.id) {
                     drag_match.player2 = {
                         id: drop_team.team_id,
-                        name: "・" + drop_team.player1_name + drop_team.player2_name,
+                        name:  drop_team.player1_name + drop_team.player2_name,
                     };
                     changed_player = 2;
                 }
@@ -320,13 +320,13 @@ const vue = new Vue({
                         case 1:
                             drop_match.player2 = {
                                 id: drag_team.team_id,
-                                name: "・" + drag_team.player1_name + drag_team.player2_name,
+                                name: drag_team.player1_name + drag_team.player2_name,
                             };
                             break;
                         case 2:
                             drop_match.player1 = {
                                 id: drag_team.team_id,
-                                name: "・" + drag_team.player1_name + drag_team.player2_name,
+                                name: drag_team.player1_name + drag_team.player2_name,
                             };
                             break;
                     }
@@ -334,12 +334,12 @@ const vue = new Vue({
                     if(drop_team.team_id === drop_match.player1.id) {
                         drop_match.player1 = {
                             id: drag_team.team_id,
-                            name: "・" + drag_team.player1_name + drag_team.player2_name,
+                            name: drag_team.player1_name + drag_team.player2_name,
                         };
                     } else if(drop_team.team_id === drop_match.player2.id) {
                         drop_match.player2 = {
                             id: drag_team.team_id,
-                            name: "・" + drag_team.player1_name + drag_team.player2_name,
+                            name: drag_team.player1_name + drag_team.player2_name,
                         };
                     }
                 }
