@@ -15,30 +15,34 @@
             <li v-for="pair in team_lists">{{ pair.player1_name + "・" + pair.player2_name}}</li>
         </ul>
         <p>--------------------------------------------------------------------------------------------------------------------------------</p>
+            
         <h3>vue-tournament-bracketを用いたサンプル実装</h3>
-        <bracket v-for="tournament in tournaments" :rounds="tournament.rounds">
-            <template #player="{ player }">
-                <div
-                @drop="dropList($event, player.id)"
-                @dragover.prevent
-                @dragenter.prevent
-                >
+
+        <details v-for="tournament in tournaments">
+            <summary>トーナメント: {{ tournament.tournament_no }}</summary>
+        <bracket :rounds="tournament.rounds">
+                <template #player="{ player }">
                     <div
-                    draggable
-                    @dragstart="dragList($event, player.id)"
-                    >
-                        <b>
-                            {{ player.name }}
-                        </b>
+                    @drop="dropList($event, player.id)"
+                    @dragover.prevent
+                    @dragenter.prevent>
+                        <div
+                        draggable
+                        @dragstart="dragList($event, player.id)">
+                            <b>
+                                {{ player.name }}
+                            </b>
+                        </div>
                     </div>
-                </div>
-            </template>
-            <template  #player-extension-bottom = " {match} ">
-                <button type="button" :value="match.match_id">
-                    試合番号：{{ match.match_id }}
-                </button>
-            </template>
+                </template>
+                <template  #player-extension-bottom = " {match} ">
+                    <button type="button" :value="match.match_id">
+                        試合番号：{{ match.match_id }}
+                    </button>
+                </template>
         </bracket>
+    </details>
+
         <p>----------------------------------------------------------------------------------------------------------------------------------</p>
     </div>
     <script src="tournament.js"></script>

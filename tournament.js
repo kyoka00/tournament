@@ -53,6 +53,7 @@ const vue = new Vue({
     },
     data: {
         tournaments: [],
+        // show_tournament_no: 1,
         team_lists: [
             {
                 team_id: 1,
@@ -192,12 +193,13 @@ const vue = new Vue({
                 player2_name: 'BH',
                 tournament_no: 2
             },
-        ],
+],
         match_num: 0,
         drag_team_id: null,
         drag_match_id: null,
     },
     methods:{
+        // トーナメント表のひな型を作る
         create_tournament(tournament_no, team_lists) {
             let team_num = team_lists.length;
             this.tournaments.push(
@@ -208,6 +210,7 @@ const vue = new Vue({
             );
             this.create_rounds(team_num);
         },
+        // ひな型を作るための再帰関数
         create_rounds(team_num) {
             team_num = Math.ceil(team_num / 2);
             this.tournaments[this.tournaments.length - 1].rounds.push(
@@ -229,6 +232,7 @@ const vue = new Vue({
                 this.create_rounds(team_num);
             }
         },
+        // 適当にチームリストをひな型にぶち込む
         allot_team(tournament_no, team_lists) {
             this.tournaments[tournament_no - 1].rounds[0].games.find(obj => {
                 // そのトーナメントの1回戦の試合番号を1にするための変数
@@ -257,18 +261,21 @@ const vue = new Vue({
                 }
             })
         },
+        // 試合番号ボタン押下時、画面遷移
         view_result_or_play_start(match_id) {
             // 条件式：　試合番号で受信ボックスTBLに検索を掛けても、登録済みのレコードが無い && 選手が一人しかいない試合（シード）ではない
             if(match_id) {
                 // 試合設定画面に遷移
             } else {
-                // モーダル表示
+                // 試合結果画面に遷移
             }
         },
+        // チームをドラッグした時の処理
         dragList(event, drag_team_id) {
             this.drag_team_id = drag_team_id;
             this.drag_match_id = event.target.parentNode.parentNode.parentNode.parentNode.children[1].value;
         },
+        // チームをドロップしたときの処理
         dropList(event, drop_team_id) {
             const drop_match_id = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.children[1].value;
 
@@ -300,8 +307,10 @@ const vue = new Vue({
             }
             const drop_match = this.tournaments[drop_team.tournament_no - 1].rounds[0].games.find(match => match.match_id == drop_match_id);
 
+            // 入れ替え処理
             let changed_player;
             if(drag_team.tournament_no === drop_team.tournament_no) {
+                // 同じトーナメント内で入れ替えた時の処理
                 if(drag_team.team_id === drag_match.player1.id) {
                     drag_match.player1 = {
                         id: drop_team.team_id,
@@ -315,7 +324,10 @@ const vue = new Vue({
                     };
                     changed_player = 2;
                 }
-                if(drag_match.match_id === drop_match.match_id) {
+                if(drag_match.match_id === drop_match.match_id && drag_team === drop_team) {
+                    // 同じものを同じ場所に置いた時の処理
+                } else if(drag_match.match_id === drop_match.match_id) {
+                    // 同じチーム内で入れ替えた時の処理
                     switch(changed_player) {
                         case 1:
                             drop_match.player2 = {
@@ -331,6 +343,7 @@ const vue = new Vue({
                             break;
                     }
                 } else {
+                    // 別のチームで入れ替えた時の処理
                     if(drop_team.team_id === drop_match.player1.id) {
                         drop_match.player1 = {
                             id: drag_team.team_id,
@@ -345,6 +358,15 @@ const vue = new Vue({
                 }
             }
         },
+        show_tournament(event) {
+            // if(event.) {
+            //     console.log(event);
+            // // 入力値取得
+            //     let tournament_no = event.target.tournament_no;
+            // // トーナメント検索
+            // this.rounds = this.tournaments.find(tournament => tournament.tournament_no === tournament_no).rounds;
+            // }
+        },
     },
     created: function() {
         // fetch('/getPlayerList')
@@ -352,14 +374,16 @@ const vue = new Vue({
         // .catch(error => console.log(error));
         this.create_tournament(1, this.team_lists_1);
         this.allot_team(1, this.team_lists_1);
-        console.log(this.team_lists_2);
         this.create_tournament(2, this.team_lists_2);
         this.allot_team(2, this.team_lists_2);
         console.log(this.tournaments);
     },
     computed: {
-        team_lists_1 () {
-            let lists = this.team_lists.filter(team => team.tournament_no === 1)
+        filtered_tournament() {
+            // return this.tournaments.find(tournament => tournament.tournament_no === this.show_tournament_no);
+        },
+        team_lists_1() {
+            let lists = this.team_lists.filter(team => team.tournament_no === 1);
             if(lists.length % 2 === 1) {
                 lists.push(
                     {
@@ -372,7 +396,7 @@ const vue = new Vue({
             }
             return lists;
         },
-        team_lists_2 () {
+        team_lists_2() {
             let lists = this.team_lists.filter(team => team.tournament_no === 2);
             if(lists.length % 2 === 1) {
                 lists.push(
